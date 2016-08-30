@@ -1,4 +1,5 @@
 from scanner import openFile, getNextToken
+from IR import IRLink
 '''
 Created on Aug 29, 2016
 
@@ -29,18 +30,17 @@ returns false if syntax invalid, true if this line is valid so far, the actual l
 def checkSyntax(thisToken, tokenValue):
     global TOKENSTHISLINE
     global thisLine
-    global lineNumber
     global firstToken
     
     # Set up a new linked list element if the previous 
     if TOKENSTHISLINE == 0:
-        lineNumber += 1
-        thisLine = [lineNumber,tokenValue,0,0,0,float('inf'),0,0,0,float('inf'),0,0,0,float('inf'),lineNumber + 1]
-    
+        thisLine = IRLink(tokenValue)
+
+    """        
     if thisToken != REGISTER + COMMA:
-        print ""
         #print "this token: " + grammaticalSymbols[thisToken]
         #print "Num tokens: " + str(TOKENSTHISLINE)
+    """
     if TOKENSTHISLINE == 0:
         if thisToken == CONSTANT or thisToken == REGISTER or thisToken == COMMA or thisToken == INTO:
             return False
@@ -55,26 +55,26 @@ def checkSyntax(thisToken, tokenValue):
         if firstToken == OUTPUT and thisToken == CONSTANT:
             # Save as ir
             TOKENSTHISLINE = 0
-            thisLine[2] = tokenValue
+            thisLine.getTable()[2] = tokenValue
             return thisLine
         # 4 token lines
         if firstToken == LOADL and thisToken == CONSTANT:
             TOKENSTHISLINE = 2
-            thisLine[2] = tokenValue
+            thisLine.getTable()[2] = tokenValue
             return True
         if firstToken == MEMOP and thisToken == REGISTER:
             #TODO: Come back and fix load
             TOKENSTHISLINE = 2
-            thisLine[2] = tokenValue
+            thisLine.getTable()[2] = tokenValue
             return True
         if firstToken == ARITHOP and thisToken == REGISTER + COMMA:
             TOKENSTHISLINE = 3
-            thisLine[2] = tokenValue
+            thisLine.getTable()[2] = tokenValue
             return True
         # 6 token lines
         if firstToken == ARITHOP and thisToken == REGISTER:
             TOKENSTHISLINE = 2
-            thisLine[2] = tokenValue
+            thisLine.getTable()[2] = tokenValue
             return True
         return False
     elif TOKENSTHISLINE == 2:
@@ -91,12 +91,12 @@ def checkSyntax(thisToken, tokenValue):
         if (firstToken == MEMOP or firstToken == LOADL) and thisToken == REGISTER:
             TOKENSTHISLINE = 0
             #TODO: Fix for load
-            thisLine[10] = tokenValue
+            thisLine.getTable()[10] = tokenValue
             return thisLine
         #Otherwise, make sure it's middle register for arithop
         elif thisToken == REGISTER:
             TOKENSTHISLINE += 1
-            thisLine[6] = tokenValue
+            thisLine.getTable()[6] = tokenValue
             return True
         return False
     elif TOKENSTHISLINE == 4:
@@ -107,7 +107,7 @@ def checkSyntax(thisToken, tokenValue):
     else:
         if thisToken == REGISTER:
             TOKENSTHISLINE = 0
-            thisLine[10] = tokenValue
+            thisLine.getTable()[10] = tokenValue
             return thisLine
         return False
     
@@ -117,6 +117,7 @@ intermediate value otherwise
 """
 def parseFile(filename):
     gottenFirstLine = False
+    lastLine = None
     #print "Tokens this line: " + str(TOKENSTHISLINE)
     file = openFile(filename)
     thisToken = MEMOP
@@ -139,14 +140,16 @@ def parseFile(filename):
         if result == False:
             print "Error, invalid syntax"
             return ERROR
-        # If we got back the actual arraylist item
+        # If we got back the actual linked list node, i.e. the ir
         if result != True:
             if gottenFirstLine != True:
                 gottenFirstLine = True
                 firstLine = result
-            print result
+            else:
+                lastLine.setNext(result)
+            result.setPrev(lastLine)            
+            lastLine = result
     
-    #TODO: Remember, the last link's next needs to be set to null
         
-    return result    
+    return firstLine
         
