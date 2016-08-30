@@ -134,8 +134,8 @@ def getNextToken(file):
                 while(ord(thisChar) >= 48 and ord(thisChar) <= 57):
                     thisNum = 10 * thisNum + int(thisChar)
                     thisChar = file.read(1)
-                print "Scanner found register: r" + str(thisNum)
-                print "Also found next char: " + thisChar
+                #print "Scanner found register: r" + str(thisNum)
+                #print "Also found next char: " + thisChar
                 #Hacky workaround,necessary b/c we've already read this char
                 if thisChar == ',':
                     return [COMMA + REGISTER, 'r'+str(thisNum)]
@@ -169,7 +169,7 @@ def getNextToken(file):
                         if thisChar == 'f':
                             thisChar = file.read(1)
                             if thisChar == 't':
-                                return [ARITHOP, 'shift']
+                                return [ARITHOP, 'lshift']
                             else:
                                 print "Wrong symbol5"; return -1;
                         else:
@@ -213,7 +213,7 @@ def getNextToken(file):
             while(ord(thisChar) >= 48 and ord(thisChar) <= 57):
                 thisNum = 10 * thisNum + int(thisChar)
                 thisChar = file.read(1)
-            print "Scanner found constant: " + str(thisNum)
+            #print "Scanner found constant: " + str(thisNum)
             return [CONSTANT, str(thisNum)]
         #Comment path
         elif thisChar == '/':
@@ -227,4 +227,4 @@ def getNextToken(file):
             print "Unknown character: " + thisChar
             return -1
                                 
-    return EOF
+    return [EOF, ""]

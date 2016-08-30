@@ -125,12 +125,14 @@ def parseFile(filename):
         thisToken = pair[0]
         thisValue = pair[1]
 
+        """
         if thisToken != REGISTER + COMMA:
             print "Down here, got token: " + grammaticalSymbols[thisToken]
         else:
             print "Comma + register"
         if thisToken == ERROR:
             return ERROR
+        """
         
         # Just pass the integer
         result = checkSyntax(thisToken, thisValue)
@@ -143,6 +145,8 @@ def parseFile(filename):
                 gottenFirstLine = True
                 firstLine = result
             print result
+    
+    #TODO: Remember, the last link's next needs to be set to null
         
     return result    
         
