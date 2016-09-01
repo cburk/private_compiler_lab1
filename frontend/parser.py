@@ -63,7 +63,6 @@ def checkSyntax(thisToken, tokenValue):
             thisLine.getTable()[2] = tokenValue
             return True
         if firstToken == MEMOP and thisToken == REGISTER:
-            #TODO: Come back and fix load
             TOKENSTHISLINE = 2
             thisLine.getTable()[2] = tokenValue
             return True
@@ -80,7 +79,6 @@ def checkSyntax(thisToken, tokenValue):
     elif TOKENSTHISLINE == 2:
         #print "First token: " + grammaticalSymbols[firstToken]
         if (firstToken == MEMOP or firstToken == LOADL) and thisToken == INTO:
-            #TODO: might need to change this for load
             TOKENSTHISLINE = 3
             return True
         elif thisToken == COMMA:
@@ -90,8 +88,11 @@ def checkSyntax(thisToken, tokenValue):
     elif TOKENSTHISLINE == 3:
         if (firstToken == MEMOP or firstToken == LOADL) and thisToken == REGISTER:
             TOKENSTHISLINE = 0
-            #TODO: Fix for load
-            thisLine.getTable()[10] = tokenValue
+            #If it's load, we don't want to kill OP3, so put it in OP2
+            if thisLine.getTable()[1] == "store":
+                thisLine.getTable()[6] = tokenValue
+            else:
+                thisLine.getTable()[10] = tokenValue
             return thisLine
         #Otherwise, make sure it's middle register for arithop
         elif thisToken == REGISTER:
