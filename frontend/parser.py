@@ -20,6 +20,7 @@ EOF = 9
 # For crearting the ir
 TOKENSTHISLINE = 0
 lineNumber = 0
+maxSrcNum = 0
 
 
 grammaticalSymbols = ["MEMOP", "LOADL", "ARITHOP", "OUTPUT", "NOP", "CONSTANT", "REGISTER", "COMMA", "INTO", "EOF"]
@@ -31,6 +32,7 @@ def checkSyntax(thisToken, tokenValue):
     global TOKENSTHISLINE
     global thisLine
     global firstToken
+    global maxSrcNum
     
     # Set up a new linked list element if the previous 
     if TOKENSTHISLINE == 0:
@@ -64,15 +66,21 @@ def checkSyntax(thisToken, tokenValue):
             return True
         if firstToken == MEMOP and thisToken == REGISTER:
             TOKENSTHISLINE = 2
+            if tokenValue > maxSrcNum:
+                maxSrcNum = tokenValue
             thisLine.getTable()[2] = tokenValue
             return True
         if firstToken == ARITHOP and thisToken == REGISTER + COMMA:
             TOKENSTHISLINE = 3
+            if tokenValue > maxSrcNum:
+                maxSrcNum = tokenValue
             thisLine.getTable()[2] = tokenValue
             return True
         # 6 token lines
         if firstToken == ARITHOP and thisToken == REGISTER:
             TOKENSTHISLINE = 2
+            if tokenValue > maxSrcNum:
+                maxSrcNum = tokenValue
             thisLine.getTable()[2] = tokenValue
             return True
         return False
@@ -88,6 +96,8 @@ def checkSyntax(thisToken, tokenValue):
     elif TOKENSTHISLINE == 3:
         if (firstToken == MEMOP or firstToken == LOADL) and thisToken == REGISTER:
             TOKENSTHISLINE = 0
+            if tokenValue > maxSrcNum:
+                maxSrcNum = tokenValue
             #If it's load, we don't want to kill OP3, so put it in OP2
             if thisLine.getTable()[1] == "store":
                 thisLine.getTable()[6] = tokenValue
@@ -97,6 +107,8 @@ def checkSyntax(thisToken, tokenValue):
         #Otherwise, make sure it's middle register for arithop
         elif thisToken == REGISTER:
             TOKENSTHISLINE += 1
+            if tokenValue > maxSrcNum:
+                maxSrcNum = tokenValue
             thisLine.getTable()[6] = tokenValue
             return True
         return False
@@ -108,6 +120,8 @@ def checkSyntax(thisToken, tokenValue):
     else:
         if thisToken == REGISTER:
             TOKENSTHISLINE = 0
+            if tokenValue > maxSrcNum:
+                maxSrcNum = tokenValue
             thisLine.getTable()[10] = tokenValue
             return thisLine
         return False
@@ -121,6 +135,7 @@ def parseFile(filename):
     lastLine = None
     #print "Tokens this line: " + str(TOKENSTHISLINE)
     file = openFile(filename)
+    numInsts = 0
     thisToken = MEMOP
     while thisToken != EOF:
         pair = getNextToken(file)
@@ -143,14 +158,16 @@ def parseFile(filename):
             return ERROR
         # If we got back the actual linked list node, i.e. the ir
         if result != True:
+            numInsts += 1
             if gottenFirstLine != True:
                 gottenFirstLine = True
                 firstLine = result
             else:
                 lastLine.setNext(result)
-            result.setPrev(lastLine)            
+            result.setPrev(lastLine)
             lastLine = result
     
+    print lastLine.getPrev() == None
         
-    return firstLine
+    return [firstLine, lastLine, numInsts, maxSrcNum]
         

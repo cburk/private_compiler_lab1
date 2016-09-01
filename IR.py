@@ -15,32 +15,25 @@ class IRLink(object):
     #Pretty printing for final form
     #TODO: possible optimization, hashtable strings to ints for matching?
     #TODO: RN pulling ops from SR, for lab1 needs to be VR, for lab2 PR
+    #NOTE: for constants, vr and pr never modified, just look at cr for value
     def __str__(self):
         table = self.table
         opName = table[1]
         retStr = opName
-        #OP1
-        firstOp = table[2]
-        if firstOp != 0:
-            retStr += "\t" + firstOp
-        else:
-            #NOP case
+        if opName == "nop":
             return retStr
-        #OP2/3
         if opName==("output"):
-            return retStr
-        elif opName == "loadl" or opName == "load":
-            return retStr + "\t=>\t" + str(table[10])
+            return retStr + "\t" + str(table[2])
+        elif opName == "loadl":
+            return retStr + "\t" + str(table[2]) + "\t=>\tr" + str(table[11])
+        elif opName == "load":
+            return retStr + "\tr" +str(table[3]) + "\t=>\tr" + str(table[11])
         elif opName == "store":
-            return retStr + "\t=>\t" + str(table[6])
+            return retStr + "\tr" +str(table[3]) + "\t=>\tr" + str(table[7])
         #arithop
         else:
-            return retStr + "," + str(table[6]) + "\t=>\t" + str(table[10])
+            return retStr + "\tr" +str(table[3]) + ",r" + str(table[7]) + "\t=>\tr" + str(table[11])
         
-
-
-        #TODO: Change to be specific for each type, ex arithops need ,'s and most need =>
-        #return str(self.table[1]) + " , " + str(self.table[2]) + " , " + str(self.table[6]) + " , " + str(self.table[10])
         
     def getPrev(self):
         return self.table[0]

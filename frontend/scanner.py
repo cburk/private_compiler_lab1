@@ -138,8 +138,8 @@ def getNextToken(file):
                 #print "Also found next char: " + thisChar
                 #Hacky workaround,necessary b/c we've already read this char
                 if thisChar == ',':
-                    return [COMMA + REGISTER, 'r'+str(thisNum)]
-                return [REGISTER, 'r'+str(thisNum)]
+                    return [COMMA + REGISTER, thisNum]
+                return [REGISTER, thisNum]
             else:
                 print "Wrong symbol5"; return -1;
                     
@@ -214,7 +214,7 @@ def getNextToken(file):
                 thisNum = 10 * thisNum + int(thisChar)
                 thisChar = file.read(1)
             #print "Scanner found constant: " + str(thisNum)
-            return [CONSTANT, str(thisNum)]
+            return [CONSTANT, thisNum]
         #Comment path
         elif thisChar == '/':
             thisChar = file.read(1)
