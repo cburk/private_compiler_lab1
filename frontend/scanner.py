@@ -20,7 +20,7 @@ grammaticalSymbols = ["MEMOP", "LOADL", "ARITHOP", "OUTPUT", "NOP", "CONSTANT", 
 
 
 def parserAddSymbol(code):
-    print "Found symbol of type: " + grammaticalSymbols[code]
+    #print "Found symbol of type: " + grammaticalSymbols[code]
     return 0
 
 def openFile(fileName):

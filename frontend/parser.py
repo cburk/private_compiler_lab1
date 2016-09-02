@@ -40,8 +40,8 @@ def checkSyntax(thisToken, tokenValue):
 
     """        
     if thisToken != REGISTER + COMMA:
-        #print "this token: " + grammaticalSymbols[thisToken]
-        #print "Num tokens: " + str(TOKENSTHISLINE)
+        ###print "this token: " + grammaticalSymbols[thisToken]
+        ###print "Num tokens: " + str(TOKENSTHISLINE)
     """
     if TOKENSTHISLINE == 0:
         if thisToken == CONSTANT or thisToken == REGISTER or thisToken == COMMA or thisToken == INTO:
@@ -85,7 +85,7 @@ def checkSyntax(thisToken, tokenValue):
             return True
         return False
     elif TOKENSTHISLINE == 2:
-        #print "First token: " + grammaticalSymbols[firstToken]
+        ###print "First token: " + grammaticalSymbols[firstToken]
         if (firstToken == MEMOP or firstToken == LOADL) and thisToken == INTO:
             TOKENSTHISLINE = 3
             return True
@@ -133,7 +133,7 @@ intermediate value otherwise
 def parseFile(filename):
     gottenFirstLine = False
     lastLine = None
-    #print "Tokens this line: " + str(TOKENSTHISLINE)
+    ##print "Tokens this line: " + str(TOKENSTHISLINE)
     file = openFile(filename)
     numInsts = 0
     thisToken = MEMOP
@@ -144,9 +144,9 @@ def parseFile(filename):
 
         """
         if thisToken != REGISTER + COMMA:
-            print "Down here, got token: " + grammaticalSymbols[thisToken]
+            #print "Down here, got token: " + grammaticalSymbols[thisToken]
         else:
-            print "Comma + register"
+            #print "Comma + register"
         if thisToken == ERROR:
             return ERROR
         """
@@ -154,7 +154,7 @@ def parseFile(filename):
         # Just pass the integer
         result = checkSyntax(thisToken, thisValue)
         if result == False:
-            print "Error, invalid syntax"
+            #print "Error, invalid syntax"
             return ERROR
         # If we got back the actual linked list node, i.e. the ir
         if result != True:
@@ -167,7 +167,7 @@ def parseFile(filename):
             result.setPrev(lastLine)
             lastLine = result
     
-    print lastLine.getPrev() == None
+    ##print lastLine.getPrev() == None
         
     return [firstLine, lastLine, numInsts, maxSrcNum]
         

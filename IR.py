@@ -25,7 +25,7 @@ class IRLink(object):
         if opName==("output"):
             return retStr + "\t" + str(table[2])
         elif opName == "loadl":
-            return retStr + "\t" + str(table[2]) + "\t=>\tr" + str(table[11])
+            return "loadI" + "\t" + str(table[2]) + "\t=>\tr" + str(table[11])
         elif opName == "load":
             return retStr + "\tr" +str(table[3]) + "\t=>\tr" + str(table[11])
         elif opName == "store":

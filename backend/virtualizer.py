@@ -30,7 +30,7 @@ def renameVirtRegisters(firstInstruction, lastInstruction, numLines, maxSrcReg):
     global LU
     global VRName
 
-    print "\nFinding live ranges, virtual registers\n"
+    #print "\nFinding live ranges, virtual registers\n"
     
     #Initialize mappings
     for i in range(maxSrcReg + 1):
@@ -38,19 +38,18 @@ def renameVirtRegisters(firstInstruction, lastInstruction, numLines, maxSrcReg):
         LU[i] = float("inf")
         
     curInstruction = lastInstruction
-    print "ayy lmao"
-    print "Last: " + lastInstruction.__str__()
-    print "First: " + firstInstruction.__str__()
-    print "Cur: " + curInstruction.__str__()
-    print "#: " + maxSrcReg.__str__()
-    print "Max src reg num? " + str(maxSrcReg)
+    #print "Last: " + lastInstruction.__str__()
+    #print "First: " + firstInstruction.__str__()
+    #print "Cur: " + curInstruction.__str__()
+    #print "#: " + maxSrcReg.__str__()
+    #print "Max src reg num? " + str(maxSrcReg)
     # Traverse the instruction set in reverse, find LR's and 
     for j in range(numLines):
         i = numLines - (j + 1)
         #print "looking at inst: " + str(i)
         curOpTable = curInstruction.getTable()
         instName = curOpTable[1]
-        print "Instruction: " + instName
+        #print "Instruction: " + instName
         #Update and kill op 3 IF ITS A REGISTER (remember store)
         if instName != 'output' and instName != 'nop' and instName != "store":
             update(curOpTable, 3, i)
@@ -62,7 +61,7 @@ def renameVirtRegisters(firstInstruction, lastInstruction, numLines, maxSrcReg):
         if instName != "load" and instName != "loadl" and instName != "nop" and instName != "output":
             update(curOpTable, 2, i) #2nd op, only update if not load/l, 
             
-        print "optable afterwards: " + str(curOpTable)
+        #print "optable afterwards: " + str(curOpTable)
         #Fetch next line
         curInstruction = curInstruction.getPrev()
         
