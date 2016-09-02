@@ -31,7 +31,7 @@ def getNextToken(file):
     while(thisChar):
         
         thisChar = file.read(1)
-        if thisChar == ' ' or thisChar == '\n' or thisChar == '    ' or thisChar == '':
+        if thisChar == ' ' or thisChar == '\n' or thisChar == '    ' or thisChar == '' or thisChar == '\t':
             #print "Found whitespace"
             continue
        
@@ -207,10 +207,10 @@ def getNextToken(file):
             else:
                 print "Wrong symbol7"; return -1;
         #Constant path
-        elif(ord(thisChar) >= 48 and ord(thisChar) <= 57):
+        elif(len(thisChar) != 0 and ord(thisChar) >= 48 and ord(thisChar) <= 57):
             thisNum = int(thisChar)
             thisChar = file.read(1)      
-            while(ord(thisChar) >= 48 and ord(thisChar) <= 57):
+            while(len(thisChar) != 0 and ord(thisChar) >= 48 and ord(thisChar) <= 57):
                 thisNum = 10 * thisNum + int(thisChar)
                 thisChar = file.read(1)
             #print "Scanner found constant: " + str(thisNum)
