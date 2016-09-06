@@ -53,6 +53,7 @@ def renameVirtRegisters(firstInstruction, lastInstruction, numLines, maxSrcReg):
         #Update and kill op 3 IF ITS A REGISTER (remember store)
         if instName != 'output' and instName != 'nop' and instName != "store":
             update(curOpTable, 3, i)
+            #TODO: Slide 29 hint, does each distinct use have a fresh VR w/ this line?
             SRToVR[curOpTable[10]] = -1
             LU[curOpTable[10]] = float("inf")
 

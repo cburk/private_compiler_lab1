@@ -1,4 +1,4 @@
-from scanner import openFile, getNextToken
+from scanner import getNextToken, openFile
 from IR import IRLink
 '''
 Created on Aug 29, 2016

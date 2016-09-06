@@ -8,9 +8,13 @@ class IRLink(object):
     '''
     Linked list nodes
     '''
+    
 
-    def __init__(self, firstCmd):
-        self.table = [None,firstCmd,0,0,0,float('inf'),0,0,0,float('inf'),0,0,0,float('inf'),None]
+    def __init__(self, firstCmd, isTable = None):
+        if isTable:
+            self.table = firstCmd
+        else:
+            self.table = [None,firstCmd,0,0,0,float('inf'),0,0,0,float('inf'),0,0,0,float('inf'),None]
 
     #Pretty printing for final form
     #TODO: possible optimization, hashtable strings to ints for matching?
