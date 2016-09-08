@@ -26,11 +26,11 @@ def parserAddSymbol(code):
 def openFile(fileName):
     return open(fileName, 'r')
     
-def getNextToken(file):
+def getNextToken(myFile):
     thisChar = 'asdf'
     while(thisChar):
         
-        thisChar = file.read(1)
+        thisChar = myFile.read(1)
         if thisChar == ' ' or thisChar == '\n' or thisChar == '    ' or thisChar == '' or thisChar == '\t':
             #print "Found whitespace"
             continue
@@ -41,22 +41,22 @@ def getNextToken(file):
 
         #INTO path
         elif thisChar == '=':
-            thisChar = file.read(1)
+            thisChar = myFile.read(1)
             if thisChar == '>':
                 return [INTO, ''];
             else:
                 print "Wrong symbol0"; return -1;
         #OUTPUT path
         elif thisChar == 'o':
-            thisChar = file.read(1)
+            thisChar = myFile.read(1)
             if thisChar == 'u':
-                thisChar = file.read(1)
+                thisChar = myFile.read(1)
                 if thisChar == 't':
-                    thisChar = file.read(1)
+                    thisChar = myFile.read(1)
                     if thisChar == 'p':
-                        thisChar = file.read(1)
+                        thisChar = myFile.read(1)
                         if thisChar == 'u':
-                            thisChar = file.read(1)
+                            thisChar = myFile.read(1)
                             if thisChar == 't':
                                 return [OUTPUT, 'output']
                             else:
@@ -71,9 +71,9 @@ def getNextToken(file):
                 print "Wrong symbol1"; return -1;
         #NOP path
         elif thisChar == 'n':
-            thisChar = file.read(1)
+            thisChar = myFile.read(1)
             if thisChar == 'o':
-                thisChar = file.read(1)
+                thisChar = myFile.read(1)
                 if thisChar == 'p':
                     return [NOP, 'nop']
                 else:
@@ -82,9 +82,9 @@ def getNextToken(file):
                 print "Wrong symbol2"; return -1;
         #ADD path
         elif thisChar == 'a':
-            thisChar = file.read(1)
+            thisChar = myFile.read(1)
             if thisChar == 'd':
-                thisChar = file.read(1)
+                thisChar = myFile.read(1)
                 if thisChar == 'd':
                     return [ARITHOP, 'add']
                 else:
@@ -93,11 +93,11 @@ def getNextToken(file):
                 print "Wrong symbol3"; return -1;
         #MULT path
         elif thisChar == 'm':
-            thisChar = file.read(1)
+            thisChar = myFile.read(1)
             if thisChar == 'u':
-                thisChar = file.read(1)
+                thisChar = myFile.read(1)
                 if thisChar == 'l':
-                    thisChar = file.read(1)
+                    thisChar = myFile.read(1)
                     if thisChar == 't':
                         return [ARITHOP, 'mult']
                     else:
@@ -108,15 +108,15 @@ def getNextToken(file):
                 print "Wrong symbol4"; return -1;
         #RSHIFT/Register/Comma paths
         elif thisChar == 'r':
-            thisChar = file.read(1)
+            thisChar = myFile.read(1)
             if thisChar == 's':
-                thisChar = file.read(1)
+                thisChar = myFile.read(1)
                 if thisChar == 'h':
-                    thisChar = file.read(1)
+                    thisChar = myFile.read(1)
                     if thisChar == 'i':
-                        thisChar = file.read(1)
+                        thisChar = myFile.read(1)
                         if thisChar == 'f':
-                            thisChar = file.read(1)
+                            thisChar = myFile.read(1)
                             if thisChar == 't':
                                 return [ARITHOP, 'rshift']
                             else:
@@ -130,10 +130,10 @@ def getNextToken(file):
             #Register path
             elif ord(thisChar) >= 48 and ord(thisChar) <= 57:
                 thisNum = int(thisChar)
-                thisChar = file.read(1)
+                thisChar = myFile.read(1)
                 while(ord(thisChar) >= 48 and ord(thisChar) <= 57):
                     thisNum = 10 * thisNum + int(thisChar)
-                    thisChar = file.read(1)
+                    thisChar = myFile.read(1)
                 #print "Scanner found register: r" + str(thisNum)
                 #print "Also found next char: " + thisChar
                 #Hacky workaround,necessary b/c we've already read this char
@@ -145,13 +145,13 @@ def getNextToken(file):
                     
         #LOAD/LOADL paths
         elif thisChar == 'l':
-            thisChar = file.read(1)
+            thisChar = myFile.read(1)
             if thisChar == 'o':
-                thisChar = file.read(1)
+                thisChar = myFile.read(1)
                 if thisChar == 'a':
-                    thisChar = file.read(1)
+                    thisChar = myFile.read(1)
                     if thisChar == 'd':
-                        thisChar = file.read(1)
+                        thisChar = myFile.read(1)
                         if thisChar == 'I':                            
                             return [LOADL, 'loadl']
                         else: #TODO: go back one byte or make sure it's valid?
@@ -161,13 +161,13 @@ def getNextToken(file):
                 else:
                     print "Wrong symbol6"; return -1;
             elif thisChar == 's':
-                thisChar = file.read(1)
+                thisChar = myFile.read(1)
                 if thisChar == 'h':
-                    thisChar = file.read(1)
+                    thisChar = myFile.read(1)
                     if thisChar == 'i':
-                        thisChar = file.read(1)
+                        thisChar = myFile.read(1)
                         if thisChar == 'f':
-                            thisChar = file.read(1)
+                            thisChar = myFile.read(1)
                             if thisChar == 't':
                                 return [ARITHOP, 'lshift']
                             else:
@@ -183,19 +183,19 @@ def getNextToken(file):
             
         #STORE/SUB paths
         elif thisChar == 's':
-            thisChar = file.read(1)
+            thisChar = myFile.read(1)
             if thisChar == 'u':
-                thisChar = file.read(1)
+                thisChar = myFile.read(1)
                 if thisChar == 'b':
                     return [ARITHOP, 'sub']
                 else:
                     print "Wrong symbol7"; return -1;
             elif thisChar == 't':
-                thisChar = file.read(1)
+                thisChar = myFile.read(1)
                 if thisChar == 'o':
-                    thisChar = file.read(1)
+                    thisChar = myFile.read(1)
                     if thisChar == 'r':
-                        thisChar = file.read(1)
+                        thisChar = myFile.read(1)
                         if thisChar == 'e':
                             return [MEMOP, 'store']
                         else:
@@ -209,18 +209,18 @@ def getNextToken(file):
         #Constant path
         elif(len(thisChar) != 0 and ord(thisChar) >= 48 and ord(thisChar) <= 57):
             thisNum = int(thisChar)
-            thisChar = file.read(1)      
+            thisChar = myFile.read(1)      
             while(len(thisChar) != 0 and ord(thisChar) >= 48 and ord(thisChar) <= 57):
                 thisNum = 10 * thisNum + int(thisChar)
-                thisChar = file.read(1)
+                thisChar = myFile.read(1)
             #print "Scanner found constant: " + str(thisNum)
             return [CONSTANT, thisNum]
         #Comment path
         elif thisChar == '/':
-            thisChar = file.read(1)
+            thisChar = myFile.read(1)
             if thisChar == '/':
                 while thisChar != '\n':
-                    thisChar = file.read(1)
+                    thisChar = myFile.read(1)
             else:
                 print "Unexpected character '/'"
         else:

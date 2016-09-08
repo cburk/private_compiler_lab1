@@ -56,11 +56,11 @@ if len(argv) == 3:
         """
         #Perform actual register allocation
         myIR = [[None,'loadl',128,0,0,float('inf'),0,0,0,0,0,1,0,1,None],
-                [None,'load',0,1,0,8,0,2,0,7,0,0,0,0,None],
+                [None,'load',0,1,0,8, 0,0,0,0, 0,2,0,7,None],
                 [None,'loadl',132,0,0,float('inf'),0,0,0,0,0,7,0,3,None],
-                [None,'load',0,7,0,float('inf'),0,4,0,6,0,0,0,0,None],
+                [None,'load',0,7,0,float('inf'),0,0,0,0, 0,4,0,6,None],
                 [None,'loadl',136,0,0,float('inf'),0,0,0,0,0,6,0,5,None],
-                [None,'load',0,6,0,float('inf'),0,5,0,6,0,0,0,0,None],
+                [None,'load',0,6,0,float('inf'),0,0,0,0, 0,5,0,6,None],
                 [None,'mult',0,4,0,float('inf'),0,5,0,float('inf'),0,3,0,7,None],
                 [None,'add',0,2,0,float('inf'),0,3,0,float('inf'),0,0,0,8,None],
                 [None,'store',0,0,0,float('inf'),0,1,0,float('inf'),0,0,0,0,None],]
@@ -79,7 +79,12 @@ if len(argv) == 3:
             
         allocatePRS(inIRForm[0], 8, 4)
             
-            
+        print "\n\nEnd allocation, printing new instr set:\n"
+        
+        curInst = inIRForm[0]
+        while(curInst != None):
+            print curInst
+            curInst = curInst.getNext()
         """
         for newIR in inIRForm:
             print newIR

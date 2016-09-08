@@ -134,11 +134,11 @@ def parseFile(filename):
     gottenFirstLine = False
     lastLine = None
     ##print "Tokens this line: " + str(TOKENSTHISLINE)
-    file = openFile(filename)
+    myFile = openFile(filename)
     numInsts = 0
     thisToken = MEMOP
     while thisToken != EOF:
-        pair = getNextToken(file)
+        pair = getNextToken(myFile)
         thisToken = pair[0]
         thisValue = pair[1]
 
