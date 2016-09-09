@@ -44,7 +44,8 @@ def loadFromSpill(VRToLoad, freePR, reservedReg, curInstr):
     
     # If this VR was stored as the result of an LI, rematerialize w/ that same LI
     if VRToLIVal[freePR] != -1:
-        remat = IRLink([0,"loadl", VRToLIVal[freePR],0,0,0, 0,0,0,0, 0,0,freePR,0, 0], True)
+        #print "Value being loaded: " + str(VRToLIVal[freePR])
+        remat = IRLink([0,"loadl", VRToLIVal[VRToLoad],0,0,0, 0,0,0,0, 0,0,freePR,0, 0], True)
         #Put it back in the linked list
         start = curInstr.getPrev()
         start.setNext(remat)
@@ -94,6 +95,8 @@ def allocatePRS(firstInstr, numVRs, numPRs):
         j += 1
         
         thisTable = curInstr.getTable()
+        #print "Instr: " + str(j) + " is: " + str(thisTable)
+        #print "PR's: " + str(PRToVR)
         PROP1 = -1
         PROP2 = -1
         
@@ -188,7 +191,7 @@ def allocatePRS(firstInstr, numVRs, numPRs):
             
         # Free PR's for 1/2 if NextUse is INFINITY
         if PROP1 != -1 and op1NextUse == float("inf"):
-            #print "OP 1 inf next use"
+            #print "OP 1 inf next use, virt:"  + str(op1VR)
             VRToPR[op1VR] = -1
             PRToVR[PROP1] = -1
             VRToLIVal[op1VR] = -1
@@ -243,6 +246,7 @@ def allocatePRS(firstInstr, numVRs, numPRs):
             
             # If OP3 PR set w/ loadI, note in array
             if thisTable[1] == 'loadl':
+                #print "Setting vr2li for vr: " + str(op3VR) + " as: " + str(thisTable[2])
                 VRToLIVal[op3VR] = thisTable[2]
             else:
                 VRToLIVal[op3VR] = -1
