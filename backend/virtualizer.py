@@ -20,7 +20,7 @@ def update(OPtable, OPnum, index):
         VRName += 1
     OPtable[startThisOp+1] = SRToVR[OPtable[startThisOp+0]]
     OPtable[startThisOp+3] = LU[OPtable[startThisOp+0]]
-    LU[OPtable[0]] = index
+    LU[OPtable[startThisOp + 0]] = index
     
     #Not sure if I should be doing this here, but just tag them?
 
