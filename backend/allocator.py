@@ -19,7 +19,7 @@ VRToLIVal = [] #If VR value last modified by LI, no spill necessary
 def spill(spilledVR, freePR, reservedRegister, curInstr):
     global VRToLIVal
     
-    print "Spilling"
+    #print "Spilling"
     
     # If the last modification to this term was just a LI, no need to save it, we'll get it back w/ an LI
     if VRToLIVal[spilledVR] != -1:
@@ -40,7 +40,7 @@ def spill(spilledVR, freePR, reservedRegister, curInstr):
 def loadFromSpill(VRToLoad, freePR, reservedReg, curInstr):
     global VRToLIVal
     
-    print "Loading from spill"
+    #print "Loading from spill"
     
     # If this VR was stored as the result of an LI, rematerialize w/ that same LI
     if VRToLIVal[freePR] != -1:
@@ -79,7 +79,7 @@ def allocatePRS(firstInstr, numVRs, numPRs):
     if numVRs > numPRs:
         numPRs -= 1
         reservedReg = numPRs
-        print "Num used PRs: " + str(numPRs) + " , w/ reserved Reg: " + str(reservedReg)
+        #print "Num used PRs: " + str(numPRs) + " , w/ reserved Reg: " + str(reservedReg)
     
     VRToPR = [-1] * numVRs
     PRToVR = [-1] * (numPRs + 1) # +1 b/c 1 reserved
@@ -90,7 +90,7 @@ def allocatePRS(firstInstr, numVRs, numPRs):
     curInstr = firstInstr
     j = 0
     while True:
-        print "Inst: " + str(j)
+        #print "Inst: " + str(j)
         j += 1
         
         thisTable = curInstr.getTable()
@@ -123,7 +123,7 @@ def allocatePRS(firstInstr, numVRs, numPRs):
                         farthestPR = 1 + i
                         usedAt = NextUse[1 + i]
                 spilledVR = PRToVR[farthestPR]
-                print "Had to spill for op 1, spilling PR: " + str(farthestPR) + " , which is VR: " + str(spilledVR) + ", which is next used at: " + str(usedAt)
+                #print "Had to spill for op 1, spilling PR: " + str(farthestPR) + " , which is VR: " + str(spilledVR) + ", which is next used at: " + str(usedAt)
                 # TODO: Spill and load op val from mem
                 freePR = farthestPR
                 VRToPR[spilledVR] = -1
@@ -135,7 +135,7 @@ def allocatePRS(firstInstr, numVRs, numPRs):
             NextUse[freePR] = op1NextUse
             PROP1 = freePR
             
-            print "OP 1, vr: " + str(op1VR) + " in pr: " + str(freePR)
+            #print "OP 1, vr: " + str(op1VR) + " in pr: " + str(freePR)
                             
             # Keep track of 
             thisTable[4] = freePR
@@ -169,7 +169,7 @@ def allocatePRS(firstInstr, numVRs, numPRs):
                         farthestPR = 1 + i
                         usedAt = NextUse[1 + i]
                 spilledVR = PRToVR[farthestPR]
-                print "Had to spill for OP2, spilling PR: " + str(farthestPR) + " , which is VR: " + str(spilledVR) + ", which is next used at: " + str(usedAt)
+                #print "Had to spill for OP2, spilling PR: " + str(farthestPR) + " , which is VR: " + str(spilledVR) + ", which is next used at: " + str(usedAt)
                 # TODO: Spill and load OP2 val
                 freePR = farthestPR
                 VRToPR[spilledVR] = -1
@@ -181,21 +181,21 @@ def allocatePRS(firstInstr, numVRs, numPRs):
             NextUse[freePR] = op2NextUse
             PROP2 = freePR
             
-            print "OP 2, vr: " + str(op2VR) + " in pr: " + str(freePR)
+            #print "OP 2, vr: " + str(op2VR) + " in pr: " + str(freePR)
                         
             # Keep track of in IR
             thisTable[8] = freePR
             
         # Free PR's for 1/2 if NextUse is INFINITY
         if PROP1 != -1 and op1NextUse == float("inf"):
-            print "OP 1 inf next use"
+            #print "OP 1 inf next use"
             VRToPR[op1VR] = -1
             PRToVR[PROP1] = -1
             VRToLIVal[op1VR] = -1
             NextUse[PROP1] = float("inf")
         
         if PROP2 != -1 and op2NextUse == float("inf"):
-            print "OP 2 inf next use"
+            #print "OP 2 inf next use, virt: " + str(op2VR)
             VRToPR[op2VR] = -1
             PRToVR[PROP2] = -1
             VRToLIVal[op2VR] = -1
@@ -226,7 +226,7 @@ def allocatePRS(firstInstr, numVRs, numPRs):
                         farthestPR = 1 + i
                         usedAt = NextUse[1 + i]
                 spilledVR = PRToVR[farthestPR]
-                print "Had to spill for OP3, spilling PR: " + str(farthestPR) + " , which is VR: " + str(spilledVR) + ", which is next used at: " + str(usedAt)
+                #print "Had to spill for OP3, spilling PR: " + str(farthestPR) + " , which is VR: " + str(spilledVR) + ", which is next used at: " + str(usedAt)
 
                 # TODO: If we had to spill, save vr's val to memory
                 freePR = farthestPR
@@ -247,13 +247,13 @@ def allocatePRS(firstInstr, numVRs, numPRs):
             else:
                 VRToLIVal[op3VR] = -1
             
-            print "OP 3, vr: " + str(op3VR) + " in pr: " + str(freePR)
+            #print "OP 3, vr: " + str(op3VR) + " in pr: " + str(freePR)
             
             # Keep track of in IR
             thisTable[12] = freePR
             
-        print "Table: " + str(thisTable)
-        print "PR's: " + str(PRToVR)
+        #print "Table: " + str(thisTable)
+        #print "PR's: " + str(PRToVR)
         
         nextInst = curInstr.getNext()
         if nextInst == None:

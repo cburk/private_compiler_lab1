@@ -9,7 +9,7 @@ from backend.virtualizer import renameVirtRegisters
 from IR import IRLink
 from backend.allocator import allocatePRS
 
-print "Hello world!"
+#print "Hello world!"
 
 if len(argv) == 3:
     #Check 1
@@ -39,9 +39,8 @@ if len(argv) == 3:
         
     #Check 2    
     elif ord(argv[1][0]) >= 48 and ord(argv[1][0]) <= 57:
-        """
         numRegisters = int(argv[1])
-        print "Actual register allocation, filename: " + argv[2] + ", num registers: " + str(numRegisters)
+        #print "Actual register allocation, filename: " + argv[2] + ", num registers: " + str(numRegisters)
         
         # Scan and parse file, front end
         firstLast = parseFile(argv[2])
@@ -53,8 +52,9 @@ if len(argv) == 3:
         
         #Renaming to virt registers, fill in live ranges
         renameVirtRegisters(IRInst1, IRInstFinal, numLines, maxVRNum)
+
+        #Set up example from slides
         """
-        #Perform actual register allocation
         myIR = [[None,'loadl',128,0,0,float('inf'),0,0,0,0,0,1,0,1,None],
                 [None,'load',0,1,0,8, 0,0,0,0, 0,2,0,7,None],
                 [None,'loadl',132,0,0,float('inf'),0,0,0,0,0,7,0,3,None],
@@ -76,12 +76,28 @@ if len(argv) == 3:
             prev = this
             inIRForm.append(this)
             i += 1
-            
-        allocatePRS(inIRForm[0], 8, 4)
-            
-        print "\n\nEnd allocation, printing new instr set:\n"
+        """
         
-        curInst = inIRForm[0]
+        maxVRNum = 0
+        curInst = IRInst1
+        while(curInst != None):
+            thisTable = curInst.getTable()
+            if thisTable[3] > maxVRNum:
+                maxVRNum = thisTable[3]
+            if thisTable[7] > maxVRNum:
+                maxVRNum = thisTable[7]
+            if thisTable[11] > maxVRNum:
+                maxVRNum = thisTable[11]
+            curInst = curInst.getNext()
+           
+       #Perform actual register allocation 
+        #allocatePRS(inIRForm[0], 8, 4)
+        allocatePRS(IRInst1, maxVRNum + 1, numRegisters)
+            
+        #print "\n\nEnd allocation, printing new instr set:\n"
+        
+        #curInst = inIRForm[0]
+        curInst = IRInst1
         while(curInst != None):
             print curInst
             curInst = curInst.getNext()
