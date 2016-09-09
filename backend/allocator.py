@@ -108,14 +108,18 @@ def allocatePRS(firstInstr, numVRs, numPRs):
             #See if there's a free PR
             freePR = -1
             for i in range(numPRs):
-                # If this is a free register, but the op's vr isn't in a reg, need to laod
-                if PRToVR[i] == -1:
-                    freePR = i
-                    loadFromSpill(op1VR, i, reservedReg, curInstr)
-                    break
-                elif PRToVR[i] == op1VR:
+                # If this vr is in a reg, use that one
+                if PRToVR[i] == op1VR:
                     freePR = i
                     break
+            # If our VR isn't already stored in a PR, search for a free one
+            if freePR == -1:
+                for i in range(numPRs):
+                    if PRToVR[i] == -1:
+                        freePR = i
+                        loadFromSpill(op1VR, i, reservedReg, curInstr)
+                        break
+
             # If there wasn't, spill the one with the furthest next use
             if freePR == -1:
                 farthestPR = 0
@@ -152,16 +156,18 @@ def allocatePRS(firstInstr, numVRs, numPRs):
             #See if there's a free PR
             freePR = -1
             for i in range(numPRs):
-                # If this is a free register, but the op's vr isn't in a reg, need to laod
-                if PRToVR[i] == -1:
-                    freePR = i
-                    # TODO: Ensure it's already been spilled/stored in memory
-                    loadFromSpill(op2VR, i, reservedReg, curInstr)
-                    break
-                # If it's alrealdy in mem, no need to load
-                elif PRToVR[i] == op2VR:
+                # If this vr is in a reg, use that one
+                if PRToVR[i] == op2VR:
                     freePR = i
                     break
+            # If our VR isn't already stored in a PR, search for a free one
+            if freePR == -1:
+                for i in range(numPRs):
+                    if PRToVR[i] == -1:
+                        freePR = i
+                        loadFromSpill(op2VR, i, reservedReg, curInstr)
+                        break
+
             # If there wasn't, spill the one with the furthest next use
             if freePR == -1:
                 farthestPR = 0
@@ -214,10 +220,12 @@ def allocatePRS(firstInstr, numVRs, numPRs):
             
             #See if there's a free PR
             freePR = -1
+            #print str(numPRs)
             for i in range(numPRs):
-                if PRToVR[i] == -1 or PRToVR[i] == op3VR:
+                if PRToVR[i] == -1:
                     freePR = i
                     break
+
             # If there wasn't, spill the one with the furthest next use
             # TODO: Do we need to 
             if freePR == -1:
