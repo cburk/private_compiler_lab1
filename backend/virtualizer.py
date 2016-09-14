@@ -57,6 +57,7 @@ def renameVirtRegisters(firstInstruction, lastInstruction, numLines, maxSrcReg):
             SRToVR[curOpTable[10]] = -1
             LU[curOpTable[10]] = float("inf")
 
+
         if instName != "loadl" and instName != "nop" and instName != "output":
             update(curOpTable, 1, i) #First op, only update if a register
         if instName != "load" and instName != "loadl" and instName != "nop" and instName != "output":

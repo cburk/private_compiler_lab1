@@ -168,6 +168,8 @@ def parseFile(filename):
             lastLine = result
     
     ##print lastLine.getPrev() == None
-        
+     
+    #return [firstLine, lastLine, numInsts, numInsts + 3]
+    #Above is incorrect, actually needs to return maxSrc
     return [firstLine, lastLine, numInsts, maxSrcNum]
         

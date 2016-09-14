@@ -38,6 +38,23 @@ class IRLink(object):
         else:
             return retStr + "\tr" +str(table[4]) + ",r" + str(table[8]) + "\t=>\tr" + str(table[12])
         
+    def getVirtView(self):
+        table = self.table
+        opName = table[1]
+        retStr = opName
+        if opName == "nop":
+            return retStr
+        if opName==("output"):
+            return retStr + "\t" + str(table[2])
+        elif opName == "loadl":
+            return "loadI" + "\t" + str(table[2]) + "\t=>\tr" + str(table[11])
+        elif opName == "load":
+            return retStr + "\tr" +str(table[3]) + "\t=>\tr" + str(table[11])
+        elif opName == "store":
+            return retStr + "\tr" +str(table[3]) + "\t=>\tr" + str(table[7])
+        #arithop
+        else:
+            return retStr + "\tr" +str(table[3]) + ",r" + str(table[7]) + "\t=>\tr" + str(table[11])
         
     def getPrev(self):
         return self.table[0]
