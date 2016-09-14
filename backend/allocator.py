@@ -174,15 +174,17 @@ def allocatePRS(firstInstr, numVRs, numPRs):
                         loadFromSpill(op2VR, i, reservedReg, curInstr)
                         break
 
-            # If there wasn't, spill the one with the furthest next use
+            # If there wasn't, spill the one with the furthest next use THAT ISNT'T USED IN OP 1
             if freePR == -1:
                 farthestPR = 0
-                usedAt = NextUse[0]
-                for i in range(numPRs - 1):
+                usedAt = -10
+                for i in range(numPRs):
                     # TODO: Should I choose which to spill arbitrarily when equal?  Slides
-                    if NextUse[1 + i] > usedAt:
-                        farthestPR = 1 + i
-                        usedAt = NextUse[1 + i]
+                    # TODO2: Think I might have resolved this ^.  But should we
+                    # Be checking if we're past the current instruction for NextUse?
+                    if NextUse[i] > usedAt and PRToVR[i] != op1VR:
+                        farthestPR = i
+                        usedAt = NextUse[i]
                 spilledVR = PRToVR[farthestPR]
                 if commentsOn:
                     print "Had to spill for OP2, spilling PR: " + str(farthestPR) + " , which is VR: " + str(spilledVR) + ", which is next used at: " + str(usedAt)

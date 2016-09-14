@@ -18,4 +18,3 @@
         loadI   1024            =>r20   // Address
         store   r19             =>r20
         output  1024
-
