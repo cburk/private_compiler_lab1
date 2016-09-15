@@ -18,11 +18,6 @@ EOF = 9
 
 grammaticalSymbols = ["MEMOP", "LOADL", "ARITHOP", "OUTPUT", "NOP", "CONSTANT", "REGISTER", "COMMA", "INTO"]
 
-
-def parserAddSymbol(code):
-    #print "Found symbol of type: " + grammaticalSymbols[code]
-    return 0
-
 def openFile(fileName):
     return open(fileName, 'r')
     
@@ -139,6 +134,12 @@ def getNextToken(myFile):
                 #Hacky workaround,necessary b/c we've already read this char
                 if thisChar == ',':
                     return [COMMA + REGISTER, thisNum]
+                #Have to add this in case there's the => after a reg or constant grumble grumble
+                if thisChar == '=':
+                    thisChar = myFile.read(1)
+                    if thisChar == '>':
+                        return [REGISTER, thisNum, INTO]
+                # If people use spaces like good coders
                 return [REGISTER, thisNum]
             else:
                 print "Wrong symbol5"; return -1;
@@ -208,11 +209,18 @@ def getNextToken(myFile):
                 print "Wrong symbol7"; return -1;
         #Constant path
         elif(len(thisChar) != 0 and ord(thisChar) >= 48 and ord(thisChar) <= 57):
+            #print "Found char: " + thisChar + " w/ ord: " + str(ord(thisChar))
             thisNum = int(thisChar)
-            thisChar = myFile.read(1)      
+            thisChar = myFile.read(1)
+            #print "Found char: " + thisChar + " w/ ord: " + str(ord(thisChar))
             while(len(thisChar) != 0 and ord(thisChar) >= 48 and ord(thisChar) <= 57):
                 thisNum = 10 * thisNum + int(thisChar)
                 thisChar = myFile.read(1)
+            # In case peopel don't use spaces between const=>
+            if thisChar == '=':
+                thisChar = myFile.read(1)
+                if thisChar == '>':
+                    return [CONSTANT, thisNum, INTO] # Admittedly a queue would've been more elegant
             #print "Scanner found constant: " + str(thisNum)
             return [CONSTANT, thisNum]
         # Comma path

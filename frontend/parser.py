@@ -145,11 +145,12 @@ def parseFile(filename):
         thisValue = pair[1]
         
 
+        # Best token printing b/c reg + comma hack breaks
         """
         if thisToken != REGISTER + COMMA:
-            #print "Down here, got token: " + grammaticalSymbols[thisToken]
+            print "Down here, got token: " + grammaticalSymbols[thisToken]
         else:
-            #print "Comma + register"
+            print "Comma + register"
         if thisToken == ERROR:
             return ERROR
         """
@@ -169,6 +170,12 @@ def parseFile(filename):
                 lastLine.setNext(result)
             result.setPrev(lastLine)
             lastLine = result
+        #elif we're in the middle of the instruction, and there was an => after our last char w/ no spaces
+        elif len(pair) == 3:
+            checkSyntax(pair[2], -1)
+            if result == False:
+                return ERROR
+        
     
     ##print lastLine.getPrev() == None
      
