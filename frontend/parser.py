@@ -139,8 +139,11 @@ def parseFile(filename):
     thisToken = MEMOP
     while thisToken != EOF:
         pair = getNextToken(myFile)
+        if thisToken == EOF:
+            break
         thisToken = pair[0]
         thisValue = pair[1]
+        
 
         """
         if thisToken != REGISTER + COMMA:

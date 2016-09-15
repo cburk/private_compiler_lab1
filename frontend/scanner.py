@@ -215,6 +215,9 @@ def getNextToken(myFile):
                 thisChar = myFile.read(1)
             #print "Scanner found constant: " + str(thisNum)
             return [CONSTANT, thisNum]
+        # Comma path
+        elif thisChar == ',':
+            return [COMMA, ',']
         #Comment path
         elif thisChar == '/':
             thisChar = myFile.read(1)
