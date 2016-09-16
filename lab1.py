@@ -40,6 +40,8 @@ if len(argv) == 3:
     #Check 2    
     elif ord(argv[1][0]) >= 48 and ord(argv[1][0]) <= 57:
         numRegisters = int(argv[1])
+        if numRegisters > 64 or numRegisters < 3:
+            print "Invalid k value (number of registers), found: " + str(numRegisters)
         #print "Actual register allocation, filename: " + argv[2] + ", num registers: " + str(numRegisters)
         
         # Scan and parse file, front end
@@ -205,6 +207,9 @@ OURS:
         
 elif len(argv) == 2 and argv[1] == '-h':
     print """412alloc Help:\nOptions:\n
+    412alloc -h    : used to display this help screen
+    412alloc -x <filename>    : performs renaming on the iloc block in filename,\nas per code check 1.  Returns an iloc block w/ virtual registers.\nDoes not handle any arguments after -x
+    412alloc k <filename>    : performs register allocation w/ k physical registers on the iloc block specified by filename.\nK must be >=3 and <= 64
                """
 else:
     print "Malformed arguments: " + str(argv) + ", use 412alloc -h for help"

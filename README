@@ -1,0 +1,14 @@
+//NAME: Christian Burkhartsmeyer
+//NETID: cjb6
+
+Since this project is written in Python, it uses no makefile, just a BASH script called
+412alloc to run the python.
+
+To get help/a list of commands, run:
+	./412alloc -h
+
+To use the allocator just to rename an ILOC block (referred to as ccX.i) to virtual registers, run:
+	./412alloc -x ccX.i
+	
+To use the allocator w/ allocating a given number of registers (k), run:
+	./412alloc k ccX.i
